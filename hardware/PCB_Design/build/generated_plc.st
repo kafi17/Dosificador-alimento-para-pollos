@@ -1,0 +1,46 @@
+PROGRAM program0
+  VAR
+    BOTON_ARRANQUE AT %IX0.0 : BOOL;
+    BOTON_PARADA AT %IX0.1 : BOOL;
+    MOTOR1 AT %QX0.4 : BOOL;
+    MOTOR2 AT %QX0.5 : BOOL;
+    MOTOR3 AT %QX0.6 : BOOL;
+    MOTOR4 AT %QX0.7 : BOOL;
+    MOTOR5 AT %QX0.0 : BOOL;
+  END_VAR
+  VAR
+    TP0 : TP;
+    TP1 : TP;
+    TP2 : TP;
+    TP3 : TP;
+    TP4 : TP;
+  END_VAR
+
+  TP0(IN := TRUE, PT := T#10s);
+  IF TP0.Q THEN
+    MOTOR1 := TRUE; (*set*)
+  END_IF;
+  TP1(IN := TRUE, PT := T#12s);
+  IF TP1.Q THEN
+    MOTOR2 := TRUE; (*set*)
+  END_IF;
+  TP2(IN := TRUE, PT := T#14s);
+  IF TP2.Q THEN
+    MOTOR3 := TRUE; (*set*)
+  END_IF;
+  TP3(IN := TRUE, PT := T#16s);
+  IF TP3.Q THEN
+    MOTOR4 := TRUE; (*set*)
+  END_IF;
+  TP4(IN := TRUE, PT := T#10s);
+  MOTOR5 := TP4.Q;
+END_PROGRAM
+
+
+CONFIGURATION Config0
+
+  RESOURCE Res0 ON PLC
+    TASK task0(INTERVAL := T#20ms,PRIORITY := 0);
+    PROGRAM instance0 WITH task0 : program0;
+  END_RESOURCE
+END_CONFIGURATION
